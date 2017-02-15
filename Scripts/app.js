@@ -5,25 +5,67 @@
 
 (function () { // Beginning of the IIFE
 
+let mainNav = document.getElementById("mainNav");
+    let navbarHTML;
+
+    // STEP 1 - need an XHR object
+    let navXHR = new XMLHttpRequest();
+
+    // STEP 2 - open a file
+    navXHR.open("GET", "../navbar.html", true);
+
+    // STEP 3 - send the XMLHttpRequest
+    navXHR.send();
+
+    // STEP 4 - listen for readystate of 4 and server status of 200 onReadyStateChange
+    navXHR.onreadystatechange = function() {
+      if((this.readyState === 4) && (this.status === 200)) {
+        // read the data
+        navbarHTML = this.responseText;
+      }
+    };
+
+    // STEP 5 - wait until the Navbar file has finished loading
+    navXHR.addEventListener("load", function() {
+      mainNav.innerHTML = navbarHTML;
+      switch(document.title) {
+        case "Home":
+          let homeLink = document.getElementById("homeLink");
+          homeLink.setAttribute("class", "active");
+        break;
+
+        case "Projects":
+          let projectsLink = document.getElementById("projectsLink");
+          projectsLink.setAttribute("class", "active");
+        break;
+
+        case "Contact":
+          let contactLink = document.getElementById("contactLink");
+          contactLink.setAttribute("class", "active");
+        break;
+      }
+    });
+
+
   switch (document.title) {
     case "Home":
 
       let data = {};
 
       // STEP 1 - instantiate an XHR object
-      let XHR = new XMLHttpRequest(); length
+      let XHR = new XMLHttpRequest();
 
       // STEP 2 - open the JSON file
       XHR.open("GET", "../games.json", true);
 
       // STEP 3 - send out a call to the XHR object
-      XHR.send(null);
+      XHR.send();
 
       // STEP 4 - listen for readystate to be 4
       XHR.onreadystatechange = function () {
         if ((this.readyState === 4) && (this.status === 200)) {
+          // convert data from string to JSON format
           data = JSON.parse(this.responseText);
-
         }
       };
 
